@@ -1,0 +1,269 @@
+Binary Search...Striver Notes
+
+better than linear search...
+Get real life examples...
+
+.......iterative 
+
+	f(arr,n,target){
+
+	low=0
+	high=n-1
+
+	while(low<=high){
+	mid=low+high //2
+	if arr[mid]=target: return mid
+	elif target>arr[mid] low=mid+1
+	else:
+	     high=mid-1
+	 }
+	 return -1}
+ 
+ 
+ 
+..........Recursive approach:
+
+	def f(arr,target,start,end){
+
+	if start>end:
+	return -1
+
+	mid=low+high//2
+
+	if arr[mid]==target:
+	  return mid
+	if arr[mid]<target
+	 	return f(arr,target,mid+1,end)
+	 else
+		return f(arr,target,start,mid-1)
+	}
+
+
+Now check out searching in an infinite array:
+
+then you can take int as 2 in the first place and then double the end each time the element is not in range
+
+also mid=low+(high-low)//2
+
+......Lower Bound://the smallest point in which the element is greater than or equal to the target
+	f(arr,target,n){
+	low=0,high=n-1
+	while low<=high{
+	mid=low+(high-low)//2
+
+	if arr[mid]>=target: ans=mid   high=mid-1
+	else:
+		low = mid+1
+	return ans
+	}
+
+......Upper Bound://  returns the smallest index just greater than the element
+
+	f(arr,target,n){
+	low=0,high=n-1
+	while low<=high{
+	mid=low+(high-low)//2
+
+	if arr[mid]>target: ans=mid   high=mid-1     //the change is just that the equals sign is changed..
+	else:
+		low = mid+1
+		}
+	return ans
+	}
+
+//the application is includes the questions
+	->search the position to insert  (lower bound)
+	->floor of a number in array 
+	->ceil of a number in array(upper bound)
+	
+
+............floor of a number:
+	f(arr,target,n){
+	low=0,high=n-1
+	while low<=high{
+	mid=low+(high-low)//2
+
+	if arr[mid]<=target: ans=arr[mid]   low=mid+1    
+	else:
+		high=mid-1
+		}
+	return ans
+	}
+
+
+..........ceil of a number:
+	f(arr,target,n){
+	low=0,high=n-1
+	while low<=high{
+	mid=low+(high-low)//2
+
+	if arr[mid]>=target: ans=arr[mid]   high=mid-1  
+	else:
+		low=mid+1
+		}
+	return ans
+	}
+
+
+//find the first and last occurence...and also the find the difference in the positions of occurences are literally the same...so just remember the note
+
+......Search in a rotated sorted array...
+
+...one approach is find the peek index and then if the peek index and if the target is less than the peek element then search in the left rotated part else...search in the right part
+
+or 
+
+	f(arr,n,target){
+
+	low,high=0,n-1
+	while(low<=high){
+	mid=(low+high)//2
+
+	if arr[mid]==target:  return mid
+	//the left half is sorted
+	if arr[low]<=arr[mid]
+	 if (arr[low]<=target<=arr[mid]:
+	 	high=mid-1
+	 else:
+	 	 low=mid+1
+
+	else://the right half is sorted
+	   if arr[mid]<=target<=arr[high]:
+	   low=mid+1
+	   else:
+	   high=mid-1
+	}
+	return -1
+	}
+
+
+search in rotated sorted array- II
+
+
+there would be duplicate elements ..therefore we cannot find the sorted part of the array..
+...then the only way is to trim down the search space...
+
+	shrink the search space when
+	"if arr[low]=arr[high]=array[mid]:
+		low += 1
+		high += 1
+		continue"   //continue the loop so that the test is again conducted and if the same condition arrives the same operation is done..
+
+......Mininum in rotated sorted array ....
+
+basic brute force: O(n)
+
+optimise this to log(n) complexity
+
+*identify the sorted part at the first step
+*the sorted part may or may not have the answer
+
+->if the MINIMUM ELEMENT in the sorted part is greater than the target ...then the element is in the other part
+
+f(arr,m){
+low,high=0,n-1
+ans=INT_MAX
+
+while(low<=high){
+mid=low+(end-low)//2
+if arr[low]<=arr[mid]
+{
+	ans=min(ans,arr[low])
+	low=mid + 1
+}
+else{
+high=mid-1
+ans=min(ans,arr[mid]
+}
+}
+return ans
+}
+
+
+
+Find the number of rotation in a sorted array with unique elements
+
+find the index of the min element this would give you the  number of rotations ...therefore in the above code just return the index
+
+
+Find the number that appears just once while all the other elements appeat twice...
+
+basic brute force: if arr[ind-1]==arr[ind] or arr[ind+1]==arr[ind] if this condition breaks return the element
+
+binary search solution::
+ 	figure out a way to eliminate the number that is duplicate
+Note::: If all the elements occur twice the element at odd position will be equal to the element at the even position....arr[0]==arr[1], arr[1]==arr[2], arr[3]==arr[4]
+	now figure out a way to use binary search in the array
+	
+	
+
+->Find the PEAK ELEMENT in a rotated sorted array....
+
+	the condition is that the element at ith position must satisfy
+	" arr[i-1]<arr[i]>arr[i+1] "
+
+	but this would require o(n) ...to reduce that we must use binary search
+	
+	for the cases of n=0 and n=len(arr)-1:
+		check manually if it's the peak
+	and for the other cases
+	start the binary search fron 1 till n-2
+	
+	the bianry search would be of the form:
+	
+	f(arr,n){
+	if n==1: return 0
+	if arr[0]>arr[1]  return 1
+	if arr[n-1]>arr[n-2] return n-1
+	low=1, high=n-2
+	while low<high{
+		mid=l+h//2
+		if arr[mid]>arr[mid-1] and arr[mid]>arr[mid+1]
+			return mid
+		if arr[mid]>arr[mid-1]   # if u are in the increasing curve the peak would always be in the right
+			low=mid+1
+		else  if arr[mid]>arr[mid+1] # basically the condition is 
+			high=mid-1
+		else:
+			low=mid+1
+			or go to high=mid-1  // any one condition can give rise to a peek in case of multiple peaks
+	return -1
+	}
+	
+
+  // for multiple peaks the given pseudo code may give rise to infinite loop
+  
+
+Square root of a number using binary search
+low=0,high=n
+while low<=high{
+
+mid=l+h//2
+if mid*mid<=n{
+ans=mid
+low=mid+1
+}
+else{
+high=mid-1}
+}
+either return the height or the answer
+
+  
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
